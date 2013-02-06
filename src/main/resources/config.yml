@@ -1,0 +1,36 @@
+# these messages should be fairly obvious as to their purpose
+messages:
+  guard:
+    on-duty:
+      on-duty: '&6You are now on duty!'
+      already: '&4You are already on duty!'
+      permission: '&4You must be a guard to go on duty.'
+    off-duty:
+      off-duty: '&6You are now off duty!'
+      already: '&4You are already off duty!'
+      permission: '&4You must be a guard to go off duty.'
+  payroll: '&aYou were paid &l%s&a for your service, thank you!'
+  announcements:
+    kos-active: '&4&l[&6&lPA&4&l] &bAttention everyone, contraband is &4&lKOS&b.'
+    kos-inactive: '&4&l[&6&lPA&4&l] &bAttention everyone, contraband is &a&lNOT KOS&b.'
+
+# the threshold determines which associated message, if any, is displayed
+thresholds:
+  # checked using guardsOnDuty > announcement
+  announcement: 0
+  # checked using guardsOnDuty < kos
+  kos: 3
+
+# these schedule values are in seconds
+schedules:
+  salaries: 10
+  announcements: 6
+  
+# give the appropriate permission to grant the guard the associated salary per interval
+# use '-' for '.' if the salary permission has a '.' in it
+# (eg, gaurdduty.salary.cguard would be written as guardduty-salary-cguard)
+salaries:
+  guardduty-salary-cguard: 50
+  guardduty-salary-bguard: 100
+  guardduty-salary-aguard: 150
+  guardduty-salary-srguard: 200
