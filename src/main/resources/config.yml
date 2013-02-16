@@ -41,13 +41,14 @@ schedules:
   
 # give the appropriate permission to grant the guard the associated salary per interval
 # simply give your guards permissions similar to 'guardduty.salary.cguard'
+# list salaries in descending rank order to ensure proper salaries are dispersed
 salaries:
-  cguard: 50
-  bguard: 100
-  aguard: 150
-  srguard: 250
-  warden: 400
   srwarden: 800
+  warden: 400
+  srguard: 250
+  aguard: 150
+  bguard: 100
+  cguard: 50
 
 # whether or not to announce guards going on/off duty
 announce:
