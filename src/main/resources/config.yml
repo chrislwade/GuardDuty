@@ -5,11 +5,24 @@ messages:
       on-duty: '&6You are now on duty!'
       already: '&4You are already on duty!'
       permission: '&4You must be a guard to go on duty.'
+      announcement: '&4&l[&6&lPA&4&l] &b&l%s&b is now &lon&b duty.'
+      ready-up: '&6Do not forget to ready up by wearing your armor!' 
     off-duty:
       off-duty: '&6You are now off duty!'
       already: '&4You are already off duty!'
       permission: '&4You must be a guard to go off duty.'
-  payroll: '&aYou were paid &l%s&a for your service, thank you!'
+      announcement: '&4&l[&6&lPA&4&l] &b&l%s&b is now &loff&b duty.'
+      removed-armor: '&6Your armor has been &lremoved&6 and put in your inventory.'
+    payroll: '&aYou were paid &l%s&a for your service, thank you!'
+    drops-disposed: '&4Your inventory was collected by your supervisor and bagged for evidence.'
+  guards:
+    any: '&6Guards on duty [&4&l%d&6]:&r %s'
+    none: '&4There are &lno&4 guards on duty.'
+    permission: '&4You do not have permission to access that command.'
+  enabled: '&aGuard duty enabled, remember to go &lon-duty&a to get paid!'
+  reload:
+    permission: '&4You do not have permission to access that command.'
+    complete: '&aGuardDuty configuration reloaded!'
   announcements:
     kos-active: '&4&l[&6&lPA&4&l] &bAttention everyone, contraband is &4&lKOS&b.'
     kos-inactive: '&4&l[&6&lPA&4&l] &bAttention everyone, contraband is &a&lNOT KOS&b.'
@@ -23,14 +36,49 @@ thresholds:
 
 # these schedule values are in seconds
 schedules:
-  salaries: 10
-  announcements: 6
+  salaries: 600
+  announcements: 1800
   
 # give the appropriate permission to grant the guard the associated salary per interval
-# use '-' for '.' if the salary permission has a '.' in it
-# (eg, gaurdduty.salary.cguard would be written as guardduty-salary-cguard)
+# simply give your guards permissions similar to 'guardduty.salary.cguard'
 salaries:
-  guardduty-salary-cguard: 50
-  guardduty-salary-bguard: 100
-  guardduty-salary-aguard: 150
-  guardduty-salary-srguard: 200
+  cguard: 50
+  bguard: 100
+  aguard: 150
+  srguard: 250
+  warden: 400
+  srwarden: 800
+
+# whether or not to announce guards going on/off duty
+announce:
+  on-duty: true
+  off-duty: true
+
+# inventory control options to keep your guards from profiting off of pvp
+inventory:
+  # automatically disposes all drops when guards pick them up
+  auto-dispose: true
+  # disallow drops from on-duty guards
+  prevent-drops: true
+  # forcibly remove the guards armor when going off duty
+  remove-off-duty: true
+  # do guards drop items on death
+  drop-on-death: false
+
+# list of items allowed to be picked up by guards
+# useful to allow guards to pickup saplings for re-planting
+# use the raw item id and damage value in DOUBLE QUOTES ("6:0", "6:1", "6:2", "6:3")
+allowed-pickups:
+  - "6:0"
+  - "6:1"
+  - "6:2"
+  - "6:3"
+
+# list of items allowed to be dropped by guards
+# useful to allow guards to give saplings for re-planting
+# use the raw item id and damage value in DOUBLE QUOTES ("6:0", "6:1", "6:2", "6:3")
+allowed-drops:
+  - "6:0"
+  - "6:1"
+  - "6:2"
+  - "6:3"

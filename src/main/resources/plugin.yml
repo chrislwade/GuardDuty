@@ -1,7 +1,7 @@
 name: GuardDuty
 main: net.mortu.guardduty.GuardDuty
 version: 1.0
-softdepend: [Vault]
+softdepend: [Permissions, Vault]
 commands:
   guard:
     description: Gets/sets your guard status as on duty.
@@ -12,18 +12,20 @@ commands:
     permissions: guardduty.guard
     permission-message: You must be a guard to go on/off duty.
   guards:
-    description: Shows a list of the guards currently on duty.
+    description: Lists the guards on duty.
     usage: /guards
-    permissions: guardduty.guards
-    permission-message: You do not have permission to use this command.
+    permissions: gaurdduty.gaurds
+    permission-message: You do not have access to that command.
 permissions:
   guardduty.*:
     description: Gives access to all guard duty commands.
     children:
       guardduty.guard: true
-      guardduty.guards: true
+      guardduty.gaurds: true
+      guardduty.reload: true
   guardduty.guard:
     description: Allows you to go on/off duty.
   guardduty.guards:
-    description: Allows you to see the guards currently on duty.
-    
+    description: Allows you to see the guards on duty.
+  guardduty.reload:
+    description: Allows you to reload the guard duty config.
