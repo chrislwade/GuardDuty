@@ -28,22 +28,30 @@ public class GuardsCommandExecutor implements CommandExecutor {
 		Player player = (Player) sender;
 
 		if (player.hasPermission("guardduty.guards")) {
-			if (plugin.getOnDutyGuardsCount() > 0) {
-				List<String> guardNames = new ArrayList<String>();
-				Server server = plugin.getServer();
-				for (String guardName : plugin.getOnDutyGuards()) {
-					guardNames
-							.add(server.getPlayer(guardName).getDisplayName());
-				}
-				plugin.sendMessage(player, plugin.getMessage("guards.any"),
-						plugin.getOnDutyGuardsCount(), guardNames.toString()
-								.replace("[", "").replace("]", ""));
-			} else {
-				plugin.sendMessage(player, plugin.getMessage("guards.none"));
-			}
-		} else {
+			Server server = plugin.getServer();
+			List<String> guardNames = new ArrayList<String>();
+			int guardCount = 0;
+			
+			guardCount = plugin.getOnDutyGuardsCount();
+			if (guardCount > 0) {
+				for (String guardName : plugin.getOnDutyGuards())
+					guardNames.add(server.getPlayer(guardName).getDisplayName());
+				plugin.sendMessage(player, plugin.getMessage("guards.on-duty.any"), guardCount, guardNames.toString().replace("[", "").replace("]", ""));
+			} else
+				plugin.sendMessage(player, plugin.getMessage("guards.on-duty.none"));
+			
+			guardNames.clear();
+			
+			guardCount = plugin.getOffDutyGuardsCount();
+			if (guardCount > 0) {
+				for (String guardName : plugin.getOffDutyGuards())
+					guardNames.add(server.getPlayer(guardName).getDisplayName());
+				plugin.sendMessage(player, plugin.getMessage("guards.off-duty.any"), guardCount, guardNames.toString().replace("[", "").replace("]", ""));
+				
+			} else
+				plugin.sendMessage(player, plugin.getMessage("guards.off-duty.none"));
+		} else
 			plugin.sendMessage(player, plugin.getMessage("guards.permission"));
-		}
 
 		return true;
 	}

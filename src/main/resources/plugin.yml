@@ -3,7 +3,7 @@ author: MortuTBK
 description: Manage and pay your guards!
 website: http://ci.mortu.net/job/GuardDuty/
 main: net.mortu.guardduty.GuardDuty
-version: 1.0
+version: 1.1
 softdepend: [Vault]
 commands:
   guard:

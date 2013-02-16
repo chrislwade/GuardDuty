@@ -15,9 +15,14 @@ messages:
       removed-armor: '&6Your armor has been &lremoved&6 and put in your inventory.'
     payroll: '&aYou were paid &l%s&a for your service, thank you!'
     drops-disposed: '&4Your inventory was collected by your supervisor and bagged for evidence.'
+    drop-disposed: '&6You have confiscated (and destroyed): &4&l%s&6.'
   guards:
-    any: '&6Guards on duty [&4&l%d&6]:&r %s'
-    none: '&4There are &lno&4 guards on duty.'
+    on-duty:
+      any: '&6Guards on duty [&4&l%d&6]:&r %s'
+      none: '&4There are &lno&4 guards on duty.'
+    off-duty:
+      any: '&6Guards off duty [&4&l%d&6]:&r %s'
+      none: '&4There are &lno&4 guards off duty.'
     permission: '&4You do not have permission to access that command.'
   enabled: '&aGuard duty enabled, remember to go &lon-duty&a to get paid!'
   reload:
@@ -37,7 +42,7 @@ thresholds:
 # these schedule values are in seconds
 schedules:
   salaries: 600
-  announcements: 1800
+  announcements: 480
   
 # give the appropriate permission to grant the guard the associated salary per interval
 # simply give your guards permissions similar to 'guardduty.salary.cguard'
@@ -68,18 +73,22 @@ inventory:
 
 # list of items allowed to be picked up by guards
 # useful to allow guards to pickup saplings for re-planting
-# use the raw item id and damage value in DOUBLE QUOTES ("6:0", "6:1", "6:2", "6:3")
 allowed-pickups:
-  - "6:0"
-  - "6:1"
-  - "6:2"
-  - "6:3"
+  - 6
 
 # list of items allowed to be dropped by guards
 # useful to allow guards to give saplings for re-planting
-# use the raw item id and damage value in DOUBLE QUOTES ("6:0", "6:1", "6:2", "6:3")
 allowed-drops:
-  - "6:0"
-  - "6:1"
-  - "6:2"
-  - "6:3"
+  - 6
+
+# announce to the guard if the following items are picked up
+# damage value is ignored, only ID is considered
+# do not use quotes in this section
+notify-pickups:
+  - 261
+  - 262
+  - 267
+  - 268
+  - 272
+  - 276
+  - 283

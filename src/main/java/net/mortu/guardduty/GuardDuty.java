@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -27,13 +28,16 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class GuardDuty extends JavaPlugin implements Listener {
 
 	/*
-	 * TODO: - add ability to force guard on duty upon join - add separate
-	 * on/off duty permissions to work with forced on-duty option - support
-	 * auto-equipping armor - support defining kits directly (that can be
-	 * auto-equipped) - support completely clearing inventory when going on/off
-	 * duty - define a Guard glass that inherits from player (encapsulate guard
-	 * related tasks) - keep track of and save accumulated on-duty time for
-	 * guards - promotion eligibility announcements / automated promotions
+	 * TODO:
+	 * - add ability to force guard on duty upon join
+	 * - add separate on/off duty permissions to work with forced on-duty option
+	 * - support auto-equipping armor
+	 * - support defining kits directly (that can be auto-equipped)
+	 * - support completely clearing inventory when going on/off duty
+	 * - define a Guard glass that inherits from player (encapsulate guard related tasks)
+	 * - keep track of and save accumulated on-duty time for guards
+	 * - promotion eligibility announcements / automated promotions
+	 * 
 	 */
 
 	private boolean oneTimeInitializationDone = false;
@@ -50,25 +54,21 @@ public class GuardDuty extends JavaPlugin implements Listener {
 			oneTimeInitializationDone = true;
 		}
 
-		if (!new File(this.getDataFolder().getPath() + File.separatorChar
-				+ "config.yml").exists())
+		if (!new File(this.getDataFolder().getPath() + File.separatorChar + "config.yml").exists())
 			saveDefaultConfig();
 
 		onDutyGuards = new HashMap<String, Long>();
 		startTasks();
 
-		if (!setupEconomy()) {
-			getLogger().warning(
-					"Guard payroll disabled due to no Vault dependency found!");
-		}
+		if (!setupEconomy()) 
+			getLogger().warning("Guard payroll disabled due to no Vault dependency found!");
 
 		getServer().getPluginManager().registerEvents(this, this);
 
 		String message = getMessage("enabled");
-		for (Player player : getServer().getOnlinePlayers()) {
+		for (Player player : getServer().getOnlinePlayers())
 			if (player.hasPermission("guardduty.guard"))
 				sendMessage(player, message);
-		}
 	}
 
 	@Override
@@ -90,9 +90,14 @@ public class GuardDuty extends JavaPlugin implements Listener {
 
 		if (!isGuardOnDuty(guard))
 			return;
-
-		if (isAllowedItem(event.getItem().getItemStack(), "pickups"))
+		
+		ItemStack item = event.getItem().getItemStack();
+		
+		if (isItemListed(item.getTypeId(), "allowed-pickups"))
 			return;
+		
+		if (isItemListed(item.getTypeId(), "notify-pickups"))
+			sendMessage(guard, getMessage("guard.drop-disposed"), item.getType().toString());
 
 		event.getItem().remove();
 		event.setCancelled(true);
@@ -109,8 +114,8 @@ public class GuardDuty extends JavaPlugin implements Listener {
 
 		if (!isGuardOnDuty(guard))
 			return;
-
-		if (isAllowedItem(event.getItemDrop().getItemStack(), "drops"))
+	
+		if (isItemListed(event.getItemDrop().getItemStack().getTypeId(), "allowed-drops"))
 			return;
 
 		event.setCancelled(true);
@@ -138,9 +143,8 @@ public class GuardDuty extends JavaPlugin implements Listener {
 			return;
 
 		Player player = event.getPlayer();
-		if (player.hasPermission("guardduty.guard")) {
+		if (player.hasPermission("guardduty.guard"))
 			sendMessage(player, getMessage("enabled"));
-		}
 	}
 
 	@EventHandler
@@ -149,9 +153,8 @@ public class GuardDuty extends JavaPlugin implements Listener {
 			return;
 
 		Player player = event.getPlayer();
-		if (player.hasPermission("guardduty.guard") && isGuardOnDuty(player)) {
+		if (player.hasPermission("guardduty.guard") && isGuardOnDuty(player))
 			setGuardOffDuty(player);
-		}
 	}
 
 	public void reload() {
@@ -173,15 +176,13 @@ public class GuardDuty extends JavaPlugin implements Listener {
 	}
 
 	private boolean setupEconomy() {
-		if (getServer().getPluginManager().getPlugin("Vault") == null) {
+		if (getServer().getPluginManager().getPlugin("Vault") == null)
 			return false;
-		}
 
 		RegisteredServiceProvider<Economy> provider = getServer()
 				.getServicesManager().getRegistration(Economy.class);
-		if (provider == null) {
+		if (provider == null)
 			return false;
-		}
 
 		economy = provider.getProvider();
 		return economy != null;
@@ -195,14 +196,11 @@ public class GuardDuty extends JavaPlugin implements Listener {
 		return getOnDutyGuardsCount() < getConfig().getInt("thresholds.kos", 3);
 	}
 
-	private boolean isAllowedItem(ItemStack itemStack, String mode) {
-		List<String> allowedItems = getConfig()
-				.getStringList("allowed-" + mode);
+	private boolean isItemListed(int item, String mode) {
+		List<Integer> allowedItems = getConfig().getIntegerList(mode);
 
 		if (allowedItems.isEmpty())
 			return false;
-
-		String item = itemStack.getTypeId() + ":" + itemStack.getDurability();
 
 		if (allowedItems.contains(item))
 			return true;
@@ -254,8 +252,8 @@ public class GuardDuty extends JavaPlugin implements Listener {
 
 	private void announceGuardStatus(Player guard, String mode) {
 		if (getConfig().getBoolean("announce." + mode, true))
-			sendMessage(guard, getMessage("guard." + mode + ".announcement"),
-					guard.getDisplayName());
+			for (Player player : getServer().getOnlinePlayers())
+				sendMessage(player, getMessage("guard." + mode + ".announcement"), guard.getDisplayName());
 	}
 
 	public void setGuardOnDuty(Player guard) {
@@ -277,11 +275,27 @@ public class GuardDuty extends JavaPlugin implements Listener {
 	public Set<String> getOnDutyGuards() {
 		return onDutyGuards.keySet();
 	}
+	
+	public Set<String> getOffDutyGuards() {
+		Set<String> names = new TreeSet<String>();
+		
+		for (Player player : getServer().getOnlinePlayers())
+			if (player.hasPermission("guardduty.guard"))
+				names.add(player.getName());
+		
+		names.removeAll(getOnDutyGuards());
+		
+		return names;
+	}
 
 	public Integer getOnDutyGuardsCount() {
 		return onDutyGuards.size();
 	}
-
+	
+	public Integer getOffDutyGuardsCount() {
+		return getOffDutyGuards().size();
+	}
+	
 	public Long getGuardIntervals(Player guard) {
 		return onDutyGuards.get(guard.getName());
 	}
@@ -304,22 +318,17 @@ public class GuardDuty extends JavaPlugin implements Listener {
 	public Double getGuardSalary(Player guard) {
 		Map<String, Object> salaries = getConfig().getConfigurationSection(
 				"salaries").getValues(false);
-		for (String permission : salaries.keySet()) {
-			if (guard.hasPermission("guardduty.salary." + permission)) {
+		for (String permission : salaries.keySet())
+			if (guard.hasPermission("guardduty.salary." + permission))
 				return Double.valueOf(salaries.get(permission).toString());
-			}
-		}
 		return 0.0;
 	}
 
 	public void payGuard(Player guard, Double salary) {
 		if (economy != null && salary > 0.0) {
-			EconomyResponse response = economy.depositPlayer(guard.getName(),
-					salary);
-			if (response.transactionSuccess()) {
-				sendMessage(guard, getMessage("guard.payroll"),
-						economy.format(salary));
-			}
+			EconomyResponse response = economy.depositPlayer(guard.getName(), salary);
+			if (response.transactionSuccess())
+				sendMessage(guard, getMessage("guard.payroll"), economy.format(salary));
 		}
 	}
 
