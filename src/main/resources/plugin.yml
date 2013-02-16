@@ -1,4 +1,7 @@
 name: GuardDuty
+author: MortuTBK
+description: Manage and pay your guards!
+website: http://ci.mortu.net/job/GuardDuty/
 main: net.mortu.guardduty.GuardDuty
 version: 1.0
 softdepend: [Permissions, Vault]
@@ -11,11 +14,13 @@ commands:
       Example: /guard off - go off duty as a guard
     permissions: guardduty.guard
     permission-message: You must be a guard to go on/off duty.
+    aliases: gd
   guards:
     description: Lists the guards on duty.
     usage: /guards
     permissions: gaurdduty.gaurds
     permission-message: You do not have access to that command.
+    aliases: gds
 permissions:
   guardduty.*:
     description: Gives access to all guard duty commands.
