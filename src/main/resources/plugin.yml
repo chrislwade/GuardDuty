@@ -4,7 +4,7 @@ description: Manage and pay your guards!
 website: http://ci.mortu.net/job/GuardDuty/
 main: net.mortu.guardduty.GuardDuty
 version: 1.0
-softdepend: [Permissions, Vault]
+softdepend: [Vault]
 commands:
   guard:
     description: Gets/sets your guard status as on duty.
