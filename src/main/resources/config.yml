@@ -2,17 +2,17 @@
 messages:
   guard:
     on-duty:
-      on-duty: '&6You are now on duty!'
       already: '&4You are already on duty!'
       permission: '&4You must be a guard to go on duty.'
       announcement: '&4&l[&6&lPA&4&l] &b&l%s&b is now &lon&b duty.'
-      ready-up: '&6Do not forget to ready up by wearing your armor!' 
+      ready-up: '&6Do not forget to ready up by wearing your armor!'
+      death: '&aYou have been charged &4&l%s&a in medical and equipment fees.' 
     off-duty:
-      off-duty: '&6You are now off duty!'
       already: '&4You are already off duty!'
       permission: '&4You must be a guard to go off duty.'
       announcement: '&4&l[&6&lPA&4&l] &b&l%s&b is now &loff&b duty.'
       removed-armor: '&6Your armor has been &lremoved&6 and put in your inventory.'
+      death: '&aYou have been charged &4&l%s&a in medical fees.'
     payroll: '&aYou were paid &l%s&a for your service, thank you!'
     drops-disposed: '&4Your inventory was collected by your supervisor and bagged for evidence.'
     drop-disposed: '&6You have confiscated (and destroyed): &4&l%s&6.'
@@ -68,8 +68,13 @@ inventory:
   prevent-drops: true
   # forcibly remove the guards armor when going off duty
   remove-off-duty: true
-  # do guards drop items on death
-  drop-on-death: false
+  # do guards keep or drop items on death (options: keep, dispose, drop)
+  action-on-death: keep
+
+# the amount a guard should pay for being killed (set to 0 to disable)
+death-tax:
+  on-duty: 1000
+  off-duty: 250
 
 # list of items allowed to be picked up by guards
 # useful to allow guards to pickup saplings for re-planting
