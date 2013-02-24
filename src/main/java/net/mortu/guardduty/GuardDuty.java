@@ -30,7 +30,9 @@ public class GuardDuty extends JavaPlugin {
 	
 	private GuardDutyManager guardDutyManager;
 	
+	@SuppressWarnings("unused") // FIXME: remove once we can unregister commands from bukkit 
 	private GuardDutyCommandExecutor guardDutyCommandExecutor;
+	@SuppressWarnings("unused") // FIXME: remove once we can unregister commands from bukkit
 	private GuardsCommandExecutor guardsCommandExecutor;
 	
 	private DeathEventListener deathEventListener;
