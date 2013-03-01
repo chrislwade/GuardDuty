@@ -3,8 +3,6 @@ package net.mortu.guardduty.tasks;
 import net.mortu.guardduty.GuardDuty;
 import net.mortu.guardduty.Utils;
 
-import org.bukkit.entity.Player;
-
 public class GuardAnnouncementTask implements Runnable {
 
 	private final GuardDuty plugin;
@@ -21,12 +19,8 @@ public class GuardAnnouncementTask implements Runnable {
 
 	@Override
 	public void run() {
-		if (plugin.getGuardDutyManager().getOnDutyGuardsCount() > plugin.getConfig().getInt("thresholds.announcements", 0)) {
-			String message = Utils.formatMessage(Utils.getMessage(plugin.getGuardDutyManager().isKosActive() ? "announcements.kos-active" : "announcements.kos-inactive"));
-
-			for (Player player : plugin.getServer().getOnlinePlayers())
-				player.sendMessage(message);
-		}
+		if (plugin.getGuardDutyManager().getOnDutyGuardsCount() > plugin.getConfig().getInt("thresholds.announcements", 0))
+			plugin.getGuardDutyManager().broadcast(Utils.formatMessage(Utils.getMessage(plugin.getGuardDutyManager().isKosActive() ? "announcements.kos-active" : "announcements.kos-inactive")));
 	}
 
 	public boolean stopTask() {
