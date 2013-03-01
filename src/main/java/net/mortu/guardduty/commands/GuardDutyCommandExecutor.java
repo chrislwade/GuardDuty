@@ -21,7 +21,7 @@ public class GuardDutyCommandExecutor implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if (!(sender instanceof Player)) {
 			sender.sendMessage("You must be a player!");
-			return false;
+			return true;
 		}
 
 		String action = args.length > 0 ? args[0] : "";

@@ -68,10 +68,16 @@ public class GuardDutyManager {
 	}
 	
 	public void announceStatus(Guard guard, String mode) {
-		String message = Utils.formatMessage(Utils.getMessage("guard." + mode + ".announcement"), guard.getDisplayName());
 		if (Utils.getConfig().getBoolean("announce." + mode, true))
-			for (Player player : Utils.getPlugin().getServer().getOnlinePlayers())
-				player.sendMessage(message);
+			broadcast(Utils.formatMessage(Utils.getMessage("guard." + mode + ".announcement"), guard.getDisplayName()));
+	}
+	
+	public void guardBroadcast(String message) {
+		plugin.getServer().broadcast(message, "guardduty.guard");
+	}
+	
+	public void broadcast(String message) {
+		plugin.getServer().broadcastMessage(message);
 	}
 	
 	public void setGuardOnDuty(Guard guard) {

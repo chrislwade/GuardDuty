@@ -6,7 +6,6 @@ import net.mortu.guardduty.commands.*;
 import net.mortu.guardduty.events.*;
 import net.mortu.guardduty.tasks.*;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -62,11 +61,8 @@ public class GuardDuty extends JavaPlugin {
 
 		startTasks();
 		registerEvents();
-
-		String message = Utils.getMessage("enabled");
-		for (Player player : getServer().getOnlinePlayers())
-			if (guardDutyManager.isGuard(player))
-				Utils.sendMessage(player, message);
+		
+		guardDutyManager.guardBroadcast(Utils.formatMessage(Utils.getMessage("enabled")));
 	}
 
 	@Override
@@ -110,8 +106,7 @@ public class GuardDuty extends JavaPlugin {
 		if (getServer().getPluginManager().getPlugin("Vault") == null)
 			return false;
 
-		RegisteredServiceProvider<Economy> provider = getServer()
-				.getServicesManager().getRegistration(Economy.class);
+		RegisteredServiceProvider<Economy> provider = getServer().getServicesManager().getRegistration(Economy.class);
 		if (provider == null)
 			return false;
 
