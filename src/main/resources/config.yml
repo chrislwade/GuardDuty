@@ -6,12 +6,14 @@ messages:
       permission: '&4You must be a guard to go on duty.'
       announcement: '&4&l[&6&lPA&4&l] &b&l%s&b is now &lon&b duty.'
       ready-up: '&6Do not forget to ready up by wearing your armor!'
+      removed-effects: '&5Do not forget to go get your potion effects.'
       death: '&aYou have been charged &4&l%s&a in medical and equipment fees.' 
     off-duty:
       already: '&4You are already off duty!'
       permission: '&4You must be a guard to go off duty.'
       announcement: '&4&l[&6&lPA&4&l] &b&l%s&b is now &loff&b duty.'
       removed-armor: '&6Your armor has been &lremoved&6 and put in your inventory.'
+      removed-effects: '&5Your potion effects have been &lremoved&5.'
       death: '&aYou have been charged &4&l%s&a in medical fees.'
     payroll: '&aYou were paid &l%s&a for your service, thank you!'
     drops-disposed: '&4Your inventory was collected by your supervisor and bagged for evidence.'
@@ -71,6 +73,13 @@ inventory:
   # do guards keep or drop items on death (options: keep, dispose, drop)
   action-on-death: keep
 
+# potion effect control options
+potion-effects:
+  on-duty:
+    remove: true
+  off-duty:
+    remove: true
+
 # the amount a guard should pay for being killed (set to 0 to disable)
 death-tax:
   on-duty: 1000
@@ -80,11 +89,57 @@ death-tax:
 # useful to allow guards to pickup saplings for re-planting
 allowed-pickups:
   - 6
+  - 260
+  - 282
+  - 297
+  - 319
+  - 320
+  - 322
+  - 349
+  - 350
+  - 354
+  - 357
+  - 360
+  - 363
+  - 364
+  - 365
+  - 366
+  - 367
+  - 375
+  - 391
+  - 392
+  - 393
+  - 394
+  - 396
+  - 400
 
 # list of items allowed to be dropped by guards
 # useful to allow guards to give saplings for re-planting
 allowed-drops:
   - 6
+  - 260
+  - 282
+  - 297
+  - 319
+  - 320
+  - 322
+  - 349
+  - 350
+  - 354
+  - 357
+  - 360
+  - 363
+  - 364
+  - 365
+  - 366
+  - 367
+  - 375
+  - 391
+  - 392
+  - 393
+  - 394
+  - 396
+  - 400
 
 # announce to the guard if the following items are picked up
 # damage value is ignored, only ID is considered
@@ -97,3 +152,4 @@ notify-pickups:
   - 272
   - 276
   - 283
+  - 373

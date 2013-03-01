@@ -9,6 +9,7 @@ import net.mortu.guardduty.Utils;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.potion.PotionEffect;
 
 public class PlayerGuard implements Guard {
 
@@ -42,12 +43,14 @@ public class PlayerGuard implements Guard {
 		this.onDuty = true;
 		this.onDutyDate = new Date();
 		wearArmor();
+		manageEffects("off-duty");
 	}
 	
 	public void setOffDuty() {
 		this.onDuty = false;
 		this.offDutyDate = new Date();
 		removeArmor();
+		manageEffects("off-duty");
 	}
 	
 	public String getName() {
@@ -97,6 +100,14 @@ public class PlayerGuard implements Guard {
 		}
 
 		Utils.sendMessage(player, Utils.getMessage("guard.off-duty.removed-armor"));
+	}
+	
+	public void manageEffects(String mode) {
+		if (Utils.getConfig().getBoolean("potion-effects." + mode + ".remove", true)) {
+			for (PotionEffect effect : getPlayer().getActivePotionEffects())
+				player.removePotionEffect(effect.getType());
+			Utils.sendMessage(player, Utils.getMessage("guard." + mode + ".removed-effects"));
+		}
 	}
 
 	public boolean deposit(Double amount) {
